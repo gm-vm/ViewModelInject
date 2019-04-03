@@ -21,10 +21,9 @@ android {
 }
 
 dependencies {
-    api project(':viewmodel-inject-annotations')
+    api project(':work-inject-annotations')
     compileOnly deps.android
-    compileOnly deps.viewModel
-    compileOnly deps.viewModelSavedState
+    compileOnly deps.work
 
     api deps.androidxAnnotations
     implementation deps.inject
@@ -34,8 +33,7 @@ dependencies {
     testImplementation deps.junit
     testImplementation deps.robolectric
     testImplementation deps.android
-    testImplementation deps.viewModel
-    testImplementation deps.viewModelSavedState
+    testImplementation deps.work
 }
 
 apply from: rootProject.file('gradle/gradle-mvn-push.gradle')
