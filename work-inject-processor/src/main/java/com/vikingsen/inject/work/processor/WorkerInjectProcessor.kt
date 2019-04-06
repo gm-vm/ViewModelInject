@@ -1,6 +1,7 @@
 package com.vikingsen.inject.work.processor
 
 import com.google.auto.service.AutoService
+import com.squareup.inject.assisted.processor.AssistedInjection
 import com.squareup.inject.assisted.processor.Key
 import com.squareup.inject.assisted.processor.NamedKey
 import com.squareup.inject.assisted.processor.asDependencyRequest
@@ -17,10 +18,9 @@ import com.squareup.inject.assisted.processor.internal.toClassName
 import com.squareup.inject.assisted.processor.internal.toTypeName
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
-import com.vikingsen.inject.viewmodel.processor.internal.AssistedInjection
-import com.vikingsen.inject.viewmodel.processor.internal.createGeneratedAnnotation
 import com.vikingsen.inject.work.WorkerInject
 import com.vikingsen.inject.work.WorkerModule
+import com.vikingsen.inject.work.processor.internal.createGeneratedAnnotation
 import javax.annotation.processing.AbstractProcessor
 import javax.annotation.processing.Filer
 import javax.annotation.processing.Messager
@@ -201,23 +201,13 @@ class WorkerInjectProcessor : AbstractProcessor() {
             valid = false
         }
         if (providedRequests.isEmpty()) {
-            warn("Work injection requires at least one non-@Assisted parameter.", targetConstructor)
-        } else {
-            val providedDuplicates = providedRequests.groupBy { it.key }.filterValues { it.size > 1 }
-            if (providedDuplicates.isNotEmpty()) {
-                error(
-                    "Duplicate non-@Assisted parameters declared. Forget a qualifier annotation?"
-                            + providedDuplicates.values.flatten().joinToString("\n * ", prefix = "\n * "),
-                    targetConstructor
-                )
-                valid = false
-            }
+            warn("Worker injection requires at least one non-@Assisted parameter.", targetConstructor)
         }
 
         if (!valid) return null
 
         val targetType = targetType.asType().toTypeName()
-        val generatedAnnotation = createGeneratedAnnotation(elements, "https://github.com/hansenji/ViewModelInject")
+        val generatedAnnotation = createGeneratedAnnotation(elements)
         return AssistedInjection(
             targetType, requests, FACTORY, "create", LISTENABLE_WORKER,
             FACTORY_KEYS, generatedAnnotation
@@ -267,7 +257,7 @@ class WorkerInjectProcessor : AbstractProcessor() {
         val moduleName = moduleType.toClassName()
         val workerNames = workerTypes.map { it.toClassName() }
         val public = Modifier.PUBLIC in moduleType.modifiers
-        val generatedAnnotation = createGeneratedAnnotation(elements, "https://github.com/hansenji/ViewModelInject")
+        val generatedAnnotation = createGeneratedAnnotation(elements)
         return WorkerInjectionModule(moduleName, public, workerNames, generatedAnnotation)
     }
 

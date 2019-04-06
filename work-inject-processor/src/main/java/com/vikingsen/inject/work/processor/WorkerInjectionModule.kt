@@ -1,12 +1,12 @@
 package com.vikingsen.inject.work.processor
 
+import com.squareup.inject.assisted.processor.assistedInjectFactoryName
 import com.squareup.inject.assisted.processor.internal.applyEach
 import com.squareup.inject.assisted.processor.internal.peerClassWithReflectionNesting
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
-import com.vikingsen.inject.viewmodel.processor.internal.assistedInjectFactoryName
 import javax.lang.model.element.Modifier.ABSTRACT
 import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
